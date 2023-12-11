@@ -2,18 +2,17 @@
 #### 该项目的文件树
 ```
 .
-├── DocxtoTxt
+├── DocxtoTxt                   docx转txt
 │   └── main.py
-├── Hadoop大数据技术实践.docx
+├── Hadoop大数据技术实践.docx     实验说明书
 ├── Readme.md
-├── WordCountTopN
+├── WordCountTopN               词频统计
 │   ├── pom.xml
 │   └── src
 │       └── main
 │           └──...
 │               └── Main.java
-├── bc_00000LVSQV3ARNLT_05.db
-└── data
+└── data                        原始数据
     ├── data.zip
     ├── docx
     │   ├── 1099.doc

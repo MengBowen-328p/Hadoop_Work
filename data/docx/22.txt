@@ -1,0 +1,12 @@
+一、什么是Paxos算法
+Paxos算法是一种在高度容错性的前提下进行快速消息传递的一种算法，这个算法解决的问题是分布式系统如何就一项决议快速达成一致认可。
+二、Paxos算法中有三种主体
+在Paxos算法中一共有三个主要部分：proposer、acceptor、和learner；proposer的任务是提出提案；而acceptor则对提案作出判断，决定是否采用；最后leaner学习得到提案；为了避免单某个节点会出现故障，会建立一个acceptor集合。Proposer首先向该集合发送提案，如果一半以上的成员同意提案，这个算法就则同意该提案。、
+三、Paxos算法的运行中的主要过程
+1.prepare阶段
+prepare提出编号为Mn的提案，同时向acceptor集合发送prepare请求。
+然后acceptor做出反馈：拒绝所有编号比Mn小的提案；如果acceptor已经批准过某一个提案，acceptor会向proposer返回已经批准的编号最大的提案的值；如果acceptor收到了请求，他的编号为Mn，并且Mn大于acceptor已经响应的所有prepare请求的编号，那么它会将自己已经批准过的所有编号中编号最大的值反馈给proposer，同时acceptor确保不会在接受编号比Mn小的提案。在这个过程中如果proposer收到了集合中至少一半的响应，则他
+会发送一个针对Mn、Vn的acceptor请求给acceptor。（Vn为收到的所有响应中编号最大提案的值）
+2.acceptor阶段
+在Accept收到acceptor的请求后，如果未收到任何编号大于M的prepare请求，则可以通过该提案。
+

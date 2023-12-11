@@ -1,0 +1,67 @@
+重庆科技学院
+
+
+
+题    目：          对paxos算法的理解
+
+
+
+学生姓名：      赵怡然       学    号：    2021443671
+
+
+
+学    院： 数理与大数据学院 专业班级： 大数据21-01
+
+
+
+
+
+
+
+
+
+
+
+
+完成日期： 2023 年 12月  4日
+
+
+成绩（百分制）：
+
+授课教师：
+
+Paxos的定义：
+Paxos算法是一种用于解决分布式系统中一致性问题的算法，被认为是分布式领域中非常重要的算法之一。它由Leslie Lamport于1990年提出，并以希腊岛屿Paxos的名字命名。
+Paxos算法的主要目标是在存在故障和延迟的分布式系统中，实现多个节点之间的一致性达成。一致性是指节点之间就某个值达成共识，即要么所有节点都接受该值，要么所有节点都不接受。
+虽然Paxos算法非常重要，但也因其复杂性而被人们称为难以理解和实现的算法。这是因为Paxos算法涉及到多个阶段的消息交换，并对各种失败情况进行了详细而复杂的处理。
+然而，Paxos算法作为一种一致性算法，在分布式系统学习和研究中是必不可少的知识点。通过学习Paxos算法，可以深入了解一致性问题在分布式系统中的挑战，并了解如何解决这些挑战。
+在学习Paxos算法时，可能需要一定的时间和努力来理解其细节和原理。但一旦掌握了Paxos算法的核心概念和实现方法，就能够更好地理解和设计分布式系统，从而提高系统的可靠性和一致性。
+Paxos 的节点角色：
+在 Paxos 协议中，有三类节点角色，分别是 Proposer、Acceptor 和 Learner，另外还有一个 Client，作为产生议题者。
+在Paxos算法中，存在四个角色：Proposer（提案者）、Acceptor（批准者）、Learner（学习者）和Client（产生议题者）。
+在Paxos中，Proposer和Acceptor是算法的核心角色。Paxos的目标是在由多个Proposer和多个Acceptor构成的系统中，使得多个Acceptor就Proposer提出的多个提案达成一致。Learner角色则只是“学习”最终被批准的提案。
+Paxos 选举过程:
+选举过程可以分为两个部分，准备阶段和选举阶段:
+在准备阶段，Proposer生成全局唯一且递增的ProposalID，并向Paxos集群的所有机器发送Prepare请求，此时不携带具体的value，只携带ProposalID。接收到Prepare请求的Acceptor会执行以下操作：
+1. 检查收到的ProposalID是否大于之前已经响应的提案的最大ProposalID（可记为Max_N）。如果是，则将该ProposalID持久化为Max_N。
+2. 返回响应并携带已经Accept的提案中最大ProposalID对应的value，如果没有已经Accept的提案，则返回空。
+3. 承诺不会接受任何小于Max_N的提案。
+
+在选举阶段，可以进一步分为P2a、P2b和P2c三个步骤：
+P2a：Proposer发送Accept请求
+一段时间后，Proposer收集到一些Prepare的回复，可能出现以下情况：
+1. 如果回复数量大于一半的Acceptor数量，并且所有回复的value都为空，那么 Proposer会发送Accept请求，并带上自己指定的value。
+2. 如果回复数量大于一半的Acceptor数量，并且部分回复的value不为空，那么Proposer会发送Accept请求，并带上具有最大ProposalID的回复中的value作为自己的提案内容。
+3. 如果回复数量小于等于一半的Acceptor数量，那么Proposer尝试生成一个更大的ProposalID，并回到准备阶段继续执行。
+P2b：Acceptor应答Accept
+当Acceptor接收到Accept请求后，会执行以下操作：
+1. 如果收到的ProposalID大于等于Max_N（通常是相等的），则回复提交成功，并将该ProposalID和value持久化。
+2. 如果收到的ProposalID小于Max_N，则不回复或回复提交失败。
+P2c：Proposer统计投票
+一段时间后，Proposer会收集到一些Accept的提交成功回复，可能出现以下情况：
+1. 如果回复数量大于一半的Acceptor数量，表示value提交成功，此时可以向所有的Proposer和Learner广播通知已经commit的value。
+2. 如果回复数量小于等于一半的Acceptor数量，则Proposer尝试生成一个更大的ProposalID，并回到准备阶段继续执行。
+
+Paxos算法通过以上准备阶段和选举阶段的交互步骤，最终实现多个Proposer和多个Acceptor在一个分布式系统中达成一致，使得某个值（value）被成功提交并学习。
+
+

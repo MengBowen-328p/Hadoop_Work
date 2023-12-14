@@ -45,6 +45,6 @@ if z=$(curl -s 'https://install.zerotier.com/' | gpg); then echo "$z" | sudo bas
 ### 通过ID加入虚拟网络
 集群的虚拟网络ID是:41d49af6c2e8a62e    
 使用zerotiercli命令加入虚拟网络:    
-``` zerotiercli -join 41d49af6c2e8a62e ```
+``` zerotiercli join 41d49af6c2e8a62e ```
 
 ##
